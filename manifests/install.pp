@@ -7,9 +7,20 @@ class passenger::install {
   }
 
   if $passenger::package_dependencies {
-    package { $passenger::package_dependencies:
-      ensure => present,
+    each($passenger::package_dependencies) |$x| {
+      if !defined($x) {
+        package { $x:
+          ensure => present,
+          tag => 'passenger-dep',
+        }
+      }
+      else {
+        Package <| title == $x |> {
+          tag => 'passenger-dep',
+        }
+      }
     }
+    Package <| tag == 'passenger-dep' |> -> Package['passenger']
   }
 
 }
