@@ -23,8 +23,7 @@ class passenger::install {
   }
 
   if $passenger::package_dependencies {
-    each($passenger::package_dependencies) |$x| {
-    }
+    passenger::install::dependency { $passenger::package_dependencies: }
     Package <| tag == 'passenger-dep' |> -> Package['passenger']
   }
 
